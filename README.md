@@ -1,4 +1,8 @@
-# ShrugMUD [![Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg?style=flat)](License)
+# ShrugMUD 
+
+[![Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg?style=flat)](License)
+
+A simple MUD server written in Go. Still a work in progress.
 
 ## License
 
