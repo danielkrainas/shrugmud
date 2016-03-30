@@ -14,14 +14,15 @@ type Server struct {
 	Port        int
 	Host        string
 	Descriptors *list.List
+	router      *CtrlRouter
 }
 
-func New(serverConfig *config.ServerConfig) *Server {
+func New(serverConfig *config.ServerConfig, router *CtrlRouter) *Server {
 	server := &Server{
 		Port:        serverConfig.Port,
 		Host:        serverConfig.Host,
-		Name:        serverConfig.Name,
 		Descriptors: list.New(),
+		router:      router,
 	}
 
 	server.Descriptors.Init()
@@ -44,8 +45,7 @@ func (server *Server) Start(realm world.Realm) {
 		return
 	}
 
-	logging.Info.Printf("%s started on port %d.", server.Host, server.Port)
-
+	logging.Info.Printf("%s started on port %d.", realm.Name(), server.Port)
 	for {
 		conn, err := listener.AcceptTCP()
 		if err != nil {
@@ -54,7 +54,7 @@ func (server *Server) Start(realm world.Realm) {
 		}
 
 		d := newDescriptor(conn)
-		d.Handle()
+		d.Handle(server.router)
 		server.Descriptors.PushFront(d)
 		logging.Info.Printf("connection accepted: %s@%s", conn.RemoteAddr().Network(), conn.RemoteAddr().String())
 	}
